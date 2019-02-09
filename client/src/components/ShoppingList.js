@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import {
 	CSSTransition,
 	TransitionGroup
@@ -10,18 +11,15 @@ import {
 	Container
 } from 'reactstrap'
 import uuid from 'uuid'
+import { getItems, deleteItem } from '../actions/itemActions'
 
 class ShoppingList extends Component {
-	state = {
-		items: [
-			{id: uuid(), name: 'Item 1'},
-			{id: uuid(), name: 'Item 2'},
-			{id: uuid(), name: 'Item 3'}
-		]
+	componentDidMount() {
+		this.props.getItems()
 	}
 
 	addItem = () => {
-		const { items } = this.state
+		const { items } = this.props.item
 		const name = prompt('Enter Item')
 
 		if (name) {
@@ -31,8 +29,12 @@ class ShoppingList extends Component {
 		}
 	}
 
+	onClickDelete = (id) => {
+		this.props.deleteItem(id)
+	}
+
 	render() {
-		const { items } = this.state
+		const { items } = this.props.item
 
 		return (
 		  	<>
@@ -54,11 +56,7 @@ class ShoppingList extends Component {
 											<Button
 											color="danger remove-item"
 											size='sm'
-											onClick={() => {
-												this.setState(state => ({
-													items: state.items.filter(item => item.id !== id)
-												}))
-											}}
+											onClick={this.onClickDelete.bind(this, id)}
 											>&times;</Button>
 											{name}
 										</ListGroupItem>
@@ -73,4 +71,8 @@ class ShoppingList extends Component {
 	}
 }
 
-export default ShoppingList
+const mapStateToProps = (state) => ({
+	item: state.item
+})
+
+export default connect(mapStateToProps, {getItems, deleteItem})(ShoppingList)
