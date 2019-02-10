@@ -18,17 +18,6 @@ class ShoppingList extends Component {
 		this.props.getItems()
 	}
 
-	addItem = () => {
-		const { items } = this.props.item
-		const name = prompt('Enter Item')
-
-		if (name) {
-			this.setState(state => ({
-				items: [...state.items, {id: uuid(), name: name}]
-			}))
-		}
-	}
-
 	onClickDelete = (id) => {
 		this.props.deleteItem(id)
 	}
@@ -39,11 +28,6 @@ class ShoppingList extends Component {
 		return (
 		  	<>
 				<Container>
-					<Button
-					color="info"
-					style={{marginTop: '15px', marginBottom: '15px'}}
-					onClick={this.addItem}
-					>Add Item</Button>
 					<ListGroup>
 						<TransitionGroup className="shopping-list">
 							{
